@@ -14,11 +14,7 @@ st.set_page_config(page_title="💰 Finanzas Personales", layout="wide")
 # Estilo personalizado para fondo, inputs y botones
 st.markdown("""
     <style>
-        body {
-            background-color: #0b1f33;
-            color: #f0f0f0;
-        }
-        .stApp {
+        body, .stApp {
             background-color: #0b1f33;
             color: #f0f0f0;
         }
@@ -30,6 +26,15 @@ st.markdown("""
             background-color: #1e88e5;
             color: white;
             border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .stButton>button:hover {
+            background-color: #1565c0 !important;
+            color: white !important;
+        }
+        .stButton>button:active {
+            background-color: #0d47a1 !important;
+            color: white !important;
         }
         .stTextInput>div>div>input,
         .stNumberInput>div>input,
@@ -39,6 +44,15 @@ st.markdown("""
             background-color: #274b6d;
             color: white;
             border-radius: 6px;
+            border: 1px solid #274b6d;
+        }
+        .stTextInput>div>div>input:focus,
+        .stNumberInput>div>input:focus,
+        .stDateInput>div>input:focus,
+        .stSelectbox>div>div:focus,
+        .stTextArea>div>textarea:focus {
+            border: 1px solid #1e88e5;
+            box-shadow: 0 0 5px #1e88e5;
         }
         .stMetric {
             background-color: #1b2d45;
