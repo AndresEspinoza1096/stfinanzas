@@ -161,10 +161,10 @@ egresos = {
     "Alimentos": {"Carne": [], "Pollo": [], "Frutas": [], "Verduras": [], "Lácteos": [], "Especería": [], "Abarrotes": [], "Cereales": [], "Panadería": []},
     "Comida": {"Menú": [], "Restaurante": []},
     "Servicios": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": []},
-    "Entretenimiento": {"Viajes": [], "Suscripciones": ["DisneyPlus", "Netflix", "Paramount"], "Juego Belén": []},
+    "Entretenimiento": {"Viajes": [], "Suscripciones": ["DisneyPlus", "Netflix", "Paramount"]},
     "Otros": {"Regalos": [], "Emergencias": [], "Bebidas": [], "Snacks": []},
     "Ahorros": {"Ahorro General": []},
-    "Manuntención": {"Belén": []}
+    "Manuntención": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": [], "Regalos": [], "Juegos": []}
 }
 
 if "movimientos" not in st.session_state:
@@ -238,7 +238,8 @@ if seccion == "Formulario y Movimientos":
         st.markdown("---")
         st.subheader("📊 Movimientos registrados")
         columnas_visibles = ["Fecha_Real", "Tipo", "Categoría", "Detalle", "Subdetalle", "Forma de pago", "Monto", "Comentario"]
-        st.dataframe(df[columnas_visibles], use_container_width=True)
+        styled_df = df[columnas_visibles].style.apply(color_filas, axis=1)
+        st.dataframe(styled_df, use_container_width=True)
 
 elif seccion == "Actualizar Registros":
     st.subheader("🖉 Editar o eliminar registros existentes")
@@ -277,7 +278,7 @@ elif seccion == "Actualizar Registros":
         st.stop()
 
     if guardar:
-        fecha_real = fecha if (fecha.replace(day=1) + timedelta(days=32)).replace(day=1) - fecha >= timedelta(days=7) else (fecha.replace(day=1) + timedelta(days=32)).replace(day=1)
+        fecha_real = fecha if (fecha.replace(day=1) + timedelta(days=32)).replace(day=1) - fecha >= timedelta(days=5) else (fecha.replace(day=1) + timedelta(days=32)).replace(day=1)
         actualizado = {
             "Fecha": datetime.combine(fecha, datetime.min.time()),
             "Fecha_Actualizacion": datetime.now(),
@@ -303,7 +304,7 @@ elif seccion == "Actualizar Registros":
         st.rerun()
             
     st.markdown("---")
-    st.dataframe(df.drop(columns=["id", "Fecha_Registro", "Fecha_Actualizacion"])[["Tipo", "Fecha_Real", "Fecha", "Categoría", "Monto", "Detalle", "Subdetalle", "Usuario", "Forma de pago"]], use_container_width=True)
+    st.dataframe(df.drop(columns=["id", "Fecha_Registro", "Fecha_Actualizacion"])[["Tipo", "Fecha_Real", "Fecha", "Categoría", "Monto", "Detalle", "Subdetalle", "Usuario", "Forma de pago", "Comentario"]], use_container_width=True)
 
 elif seccion == "Visualización":
     if st.session_state["movimientos"]:
