@@ -6,7 +6,9 @@ import plotly.io as pio
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
+import locale 
 
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')  
 
 # Configuración inicial
 st.set_page_config(page_title="💰 Finanzas Personales", layout="wide")
@@ -160,7 +162,6 @@ ingresos = {
     "Vivienda": {"Cuota Banco": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Mantenimiento": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Luz": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Internet": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Calidda": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Amortización": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"]},
     "Aseo (Limpieza)": {"Sueldo": [], "Emprendimiento": [], "Bono": [], "Negocio": [], "Agora": [], "Paypal": [], "Préstamo": []},
     "Alimentos": {"Sueldo": [], "Emprendimiento": [], "Bono": [], "Negocio": [], "Agora": [], "Paypal": [], "Préstamo": []},
-    "Comida": {"Sueldo": [], "Emprendimiento": [], "Bono": [], "Negocio": [], "Agora": [], "Paypal": [], "Préstamo": []},
     "Servicios": {"Taxi": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Educación": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Medicina": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"], "Cita Médica": ["Sueldo", "Emprendimiento", "Agora", "Paypal", "Prestamo"]},
     "Entretenimiento": {"Sueldo": [], "Emprendimiento": [], "Bono": [], "Negocio": [], "Agora": [], "Paypal": [], "Préstamo": []},
     "Otros": {"Sueldo": [], "Emprendimiento": [], "Bono": [], "Negocio": [], "Agora": [], "Paypal": [], "Préstamo": []},
@@ -172,8 +173,7 @@ ingresos = {
 egresos = {
     "Vivienda": {"Cuota Banco": [], "Mantenimiento": [], "Luz": [], "Internet": [], "Calidda": [], "Amortización": []},
     "Aseo (Limpieza)": {"Detergente": [], "Jabón": [], "Aromatizantes": [], "PrestoBarba": [], "Shampoo": []},
-    "Alimentos": {"Carne": [], "Pollo": [], "Frutas": [], "Verduras": [], "Lácteos": [], "Especería": [], "Abarrotes": [], "Cereales": [], "Panadería": []},
-    "Comida": {"Menú": [], "Restaurante": []},
+    "Alimentos": {"Carne": [], "Pollo": [], "Frutas": [], "Verduras": [], "Lácteos": [], "Especería": [], "Abarrotes": [], "Cereales": [], "Panadería": [], "Menú": [], "Restaurante": []},
     "Servicios": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": []},
     "Entretenimiento": {"Viajes": [], "Suscripciones": ["DisneyPlus", "Netflix", "Paramount"]},
     "Otros": {"Regalos": [], "Emergencias": [], "Bebidas": [], "Snacks": []},
@@ -328,6 +328,9 @@ elif seccion == "Visualización":
         df = pd.DataFrame(st.session_state["movimientos"])
         df["Fecha_Real"] = pd.to_datetime(df["Fecha_Real"], errors='coerce')
         df["Mes"] = df["Fecha_Real"].dt.to_period("M").astype(str)
+        df["Mes_Ordenado"] = df["Fecha_Real"].dt.to_period("M").dt.to_timestamp()
+        df["Mes_Label"] = df["Mes_Ordenado"].dt.strftime("%b %Y")  # Ejemplo: Mar 2025
+        df["Mes_Label"] = pd.Categorical(df["Mes_Label"], ordered=True, categories=sorted(df["Mes_Label"].unique(), key=lambda x: datetime.strptime(x, "%b %Y")))
 
         st.subheader("📈 Indicadores Generales")
         colf1, colf2, colf3 = st.columns(3)
@@ -340,8 +343,9 @@ elif seccion == "Visualización":
             categorias = ["Todas"] + sorted(df["Categoría"].dropna().unique())
             filtro_categoria = st.selectbox("Filtrar por categoría", categorias)
 
-        df_viz = df[df["Mes"].isin(fechas_seleccionadas)].copy()
-
+        #df_viz = df[df["Mes"].isin(fechas_seleccionadas)].copy()
+        df_viz = df.copy()
+        
         filtro_subdetalle = "Todas"
         if filtro_categoria != "Todas":
             df_viz = df_viz[df_viz["Categoría"] == filtro_categoria]
@@ -356,9 +360,10 @@ elif seccion == "Visualización":
             df_ahorro = pd.DataFrame(columns=df_viz.columns)
 
         df_viz = df_viz[(df_viz["Tipo"].isin(tipos_seleccionados)) | ("Ahorros" in tipos_seleccionados and df_viz["Categoría"] == "Ahorros")]
-
-        ingresos_df = df_viz[df_viz["Tipo"] == "Ingreso"]
-        egresos_df = df_viz[(df_viz["Tipo"] == "Egreso") & (df_viz["Categoría"] != "Ahorros")]
+        df_viz_ff = df_viz[df["Mes"].isin(fechas_seleccionadas)].copy()
+        
+        ingresos_df = df_viz_ff[df_viz_ff["Tipo"] == "Ingreso"]
+        egresos_df = df_viz_ff[(df_viz_ff["Tipo"] == "Egreso") & (df_viz_ff["Categoría"] != "Ahorros")]
         ahorro_total = df_ahorro["Monto"].sum()
         total_egresos_sin_ahorro = egresos_df["Monto"].sum()
         total_ingresos = ingresos_df["Monto"].sum()
@@ -374,35 +379,35 @@ elif seccion == "Visualización":
             st.metric("💰 Ahorros", f"S/ {ahorro_total:,.2f}")
 
         st.markdown("---")
-        df_group = df_viz.groupby(["Mes", "Tipo"])["Monto"].sum().reset_index()
-        fig = px.line(df_group, x="Mes", y="Monto", color="Tipo", markers=True,
-                      title="📊 Evolutivo de Ingresos vs Egresos")
-        fig.update_layout(xaxis_title="Periodo", yaxis_title="Monto (S/.)", legend_title="Tipo")
+        df_group = df_viz.groupby(["Mes_Label", "Tipo"])["Monto"].sum().reset_index()
+        fig = px.line(df_group, x="Mes_Label", y="Monto", color="Tipo", markers=True,
+                    title="📊 Evolutivo de Ingresos vs Egresos")
+        fig.update_layout(xaxis_title="Mes Año", yaxis_title="Monto (S/.)", legend_title="Tipo")
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
         st.subheader("📊 Distribución por Categoría")
-        df_categoria = df_viz.groupby(["Tipo", "Categoría"])["Monto"].sum().reset_index()
+        df_categoria = df_viz_ff.groupby(["Tipo", "Categoría"])["Monto"].sum().reset_index()
         fig_cat = px.bar(df_categoria, x="Categoría", y="Monto", color="Tipo", barmode="group",
                          title="Distribución de Montos por Categoría")
         st.plotly_chart(fig_cat, use_container_width=True)
         
         st.markdown("---")
         st.subheader("📊 Variación Mensual")
-        df_mes_cat = df_viz.pivot_table(index=["Mes"], columns="Tipo", values="Monto", aggfunc="sum", fill_value=0).reset_index()
+        df_mes_cat = df_viz.pivot_table(index=["Mes_Label"], columns="Tipo", values="Monto", aggfunc="sum", fill_value=0).reset_index()
         df_mes_cat["Variación"] = df_mes_cat.get("Ingreso", 0) - df_mes_cat.get("Egreso", 0)
         df_mes_cat["Color"] = df_mes_cat["Variación"].apply(lambda x: "Variación Positiva" if x >= 0 else "Variación Negativa")
-        fig_var_mes = px.bar(df_mes_cat, x="Mes", y="Variación", color="Color", barmode="group",
+        fig_var_mes = px.bar(df_mes_cat, x="Mes_Label", y="Variación", color="Color", barmode="group",
                              title="Variación Mensual", color_discrete_map={
                                  "Variación Positiva": "lightgreen",
                                  "Variación Negativa": "red"
                              })
-        fig_var_mes.update_layout(height=400)
+        fig_var_mes.update_layout(xaxis_title="Mes Año", height=400)
         st.plotly_chart(fig_var_mes, use_container_width=True)
 
         st.markdown("---")
         st.subheader("📊 Variación total por Categoría")
-        df_cat = df_viz.pivot_table(index="Categoría", columns="Tipo", values="Monto", aggfunc="sum", fill_value=0).reset_index()
+        df_cat = df_viz_ff.pivot_table(index="Categoría", columns="Tipo", values="Monto", aggfunc="sum", fill_value=0).reset_index()
         df_cat["Variación"] = df_cat.get("Ingreso", 0) - df_cat.get("Egreso", 0)
         df_cat["Color"] = df_cat["Variación"].apply(lambda x: "Positiva" if x >= 0 else "Negativa")
         fig_var_cat = px.bar(df_cat, x="Categoría", y="Variación", color="Color", barmode="group",
@@ -415,7 +420,7 @@ elif seccion == "Visualización":
         if filtro_categoria == "Vivienda":
             st.markdown("---")
             st.subheader("📊 Comparativa Ingresos vs Egresos en Vivienda")
-            df_viv = df_viz[df_viz["Categoría"] == "Vivienda"]
+            df_viv = df_viz_ff[df_viz_ff["Categoría"] == "Vivienda"]
             df_viv_group = df_viv.groupby(["Detalle", "Tipo"])["Monto"].sum().reset_index()
             fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
                              title="Comparativa por Subcategoría en Vivienda")
@@ -424,7 +429,7 @@ elif seccion == "Visualización":
         if filtro_categoria == "Servicios":
             st.markdown("---")
             st.subheader("📊 Comparativa Ingresos vs Egresos en Servicios")
-            df_viv = df_viz[df_viz["Categoría"] == "Servicios"]
+            df_viv = df_viz_ff[df_viz_ff["Categoría"] == "Servicios"]
             df_viv_group = df_viv.groupby(["Detalle", "Tipo"])["Monto"].sum().reset_index()
             fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
                              title="Comparativa por Subcategoría en Servicios")
