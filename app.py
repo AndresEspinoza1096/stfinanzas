@@ -231,14 +231,17 @@ if seccion == "Formulario y Movimientos":
         df = pd.DataFrame(st.session_state["movimientos"])
         df["Fecha"] = pd.to_datetime(df["Fecha"])
 
-        def color_filas(row):
-            color = "background-color: #d4edda; color: green;" if row["Tipo"] == "Ingreso" else "background-color: #f8d7da; color: red;"
-            return [color] * len(row)
+        def color_columna_tipo(val):
+            if val == "Ingreso":
+                return "background-color: #d4edda; color: green;"
+            elif val == "Egreso":
+                return "background-color: #f8d7da; color: red;"
+            return ""
 
         st.markdown("---")
         st.subheader("📊 Movimientos registrados")
         columnas_visibles = ["Fecha_Real", "Tipo", "Categoría", "Detalle", "Subdetalle", "Forma de pago", "Monto", "Comentario"]
-        styled_df = df[columnas_visibles].style.apply(color_filas, axis=1)
+        styled_df = df[columnas_visibles].style.applymap(color_columna_tipo, subset=["Tipo"])
         st.dataframe(styled_df, use_container_width=True)
 
 elif seccion == "Actualizar Registros":
