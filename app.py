@@ -6,9 +6,6 @@ import plotly.io as pio
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
-import locale 
-
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')  
 
 # Configuración inicial
 st.set_page_config(page_title="💰 Finanzas Personales", layout="wide")
@@ -181,6 +178,11 @@ egresos = {
     "Manuntención": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": [], "Regalos": [], "Juegos": []}
 }
 
+meses_es = {
+            "Jan": "Ene", "Feb": "Feb", "Mar": "Mar", "Apr": "Abr", "May": "May", "Jun": "Jun",
+            "Jul": "Jul", "Aug": "Ago", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dic"
+        }
+
 if "movimientos" not in st.session_state:
     st.session_state["movimientos"] = cargar_datos()
     
@@ -329,8 +331,14 @@ elif seccion == "Visualización":
         df["Fecha_Real"] = pd.to_datetime(df["Fecha_Real"], errors='coerce')
         df["Mes"] = df["Fecha_Real"].dt.to_period("M").astype(str)
         df["Mes_Ordenado"] = df["Fecha_Real"].dt.to_period("M").dt.to_timestamp()
-        df["Mes_Label"] = df["Mes_Ordenado"].dt.strftime("%b %Y")  # Ejemplo: Mar 2025
-        df["Mes_Label"] = pd.Categorical(df["Mes_Label"], ordered=True, categories=sorted(df["Mes_Label"].unique(), key=lambda x: datetime.strptime(x, "%b %Y")))
+        orden_meses_es = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        df["Mes_Label"] = df["Fecha_Real"].dt.strftime("%b %Y")
+        df["Mes_Label"] = df["Mes_Label"].apply(lambda x: x.replace(x[:3], meses_es.get(x[:3], x[:3])))
+        df["Mes_Label"] = pd.Categorical(
+            df["Mes_Label"],
+            categories=sorted(df["Mes_Label"].unique(), key=lambda x: (int(x[-4:]), orden_meses_es.index(x[:3]))),
+            ordered=True
+        )
 
         st.subheader("📈 Indicadores Generales")
         colf1, colf2, colf3 = st.columns(3)
