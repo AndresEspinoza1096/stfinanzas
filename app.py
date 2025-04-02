@@ -389,7 +389,11 @@ elif seccion == "Visualización":
         st.markdown("---")
         df_group = df_viz.groupby(["Mes_Label", "Tipo"])["Monto"].sum().reset_index()
         fig = px.line(df_group, x="Mes_Label", y="Monto", color="Tipo", markers=True,
-                    title="📊 Evolutivo de Ingresos vs Egresos")
+                    title="📊 Evolutivo de Ingresos vs Egresos",
+                     color_discrete_map = {
+                      "Ingreso": "#A084DC",  # Morado
+                      "Egreso": "#FFB6C1"    # Rosado tenue
+                      })
         fig.update_layout(xaxis_title="Mes Año", yaxis_title="Monto (S/.)", legend_title="Tipo")
         st.plotly_chart(fig, use_container_width=True)
 
@@ -397,7 +401,11 @@ elif seccion == "Visualización":
         st.subheader("📊 Distribución por Categoría")
         df_categoria = df_viz_ff.groupby(["Tipo", "Categoría"])["Monto"].sum().reset_index()
         fig_cat = px.bar(df_categoria, x="Categoría", y="Monto", color="Tipo", barmode="group",
-                         title="Distribución de Montos por Categoría")
+                         title="Distribución de Montos por Categoría",
+                        color_discrete_map={
+                            "Ingreso": "#A084DC",  # Morado
+                            "Egreso": "#FFB6C1"    # Rosado tenue
+                        })
         st.plotly_chart(fig_cat, use_container_width=True)
         
         st.markdown("---")
