@@ -247,12 +247,15 @@ if seccion == "Formulario y Movimientos":
         df = pd.DataFrame(st.session_state["movimientos"])
         df["Fecha"] = pd.to_datetime(df["Fecha"])
         df["Fecha_Real"] = pd.to_datetime(df["Fecha_Real"])
-        
-        # Crear columna de mes para filtro
+        orden_meses_es = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
         df["Mes_Label"] = df["Fecha_Real"].dt.strftime("%b %Y")
-        df["Mes_Label"] = pd.Categorical(df["Mes_Label"], ordered=True,
-                                         categories=sorted(df["Mes_Label"].unique(), key=lambda x: pd.to_datetime(x, format="%b %Y")))
-    
+        df["Mes_Label"] = df["Mes_Label"].apply(lambda x: x.replace(x[:3], meses_es.get(x[:3], x[:3])))
+        df["Mes_Label"] = pd.Categorical(
+            df["Mes_Label"],
+            categories=sorted(df["Mes_Label"].unique(), key=lambda x: (int(x[-4:]), orden_meses_es.index(x[:3]))),
+            ordered=True
+        )
+
         # Filtros interactivos
         colf1, colf2, colf3 = st.columns(3)
         with colf1:
