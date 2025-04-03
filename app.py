@@ -246,18 +246,43 @@ if seccion == "Formulario y Movimientos":
     if st.session_state["movimientos"]:
         df = pd.DataFrame(st.session_state["movimientos"])
         df["Fecha"] = pd.to_datetime(df["Fecha"])
-
+        df["Fecha_Real"] = pd.to_datetime(df["Fecha_Real"])
+        
+        # Crear columna de mes para filtro
+        df["Mes_Label"] = df["Fecha_Real"].dt.strftime("%b %Y")
+        df["Mes_Label"] = pd.Categorical(df["Mes_Label"], ordered=True,
+                                         categories=sorted(df["Mes_Label"].unique(), key=lambda x: pd.to_datetime(x, format="%b %Y")))
+    
+        # Filtros interactivos
+        colf1, colf2, colf3 = st.columns(3)
+        with colf1:
+            mes_seleccionado = st.selectbox("📅 Filtrar por mes", ["Todos"] + list(df["Mes_Label"].unique()), index=0)
+        with colf2:
+            tipo_seleccionado = st.selectbox("🔁 Filtrar por tipo", ["Todos"] + list(df["Tipo"].unique()), index=0)
+        with colf3:
+            categoria_seleccionada = st.selectbox("📂 Filtrar por categoría", ["Todos"] + list(df["Categoría"].unique()), index=0)
+    
+        # Aplicar filtros
+        df_filtrado = df.copy()
+        if mes_seleccionado != "Todos":
+            df_filtrado = df_filtrado[df_filtrado["Mes_Label"] == mes_seleccionado]
+        if tipo_seleccionado != "Todos":
+            df_filtrado = df_filtrado[df_filtrado["Tipo"] == tipo_seleccionado]
+        if categoria_seleccionada != "Todos":
+            df_filtrado = df_filtrado[df_filtrado["Categoría"] == categoria_seleccionada]
+    
         def color_columna_tipo(val):
             if val == "Ingreso":
                 return "background-color: #d4edda; color: green;"
             elif val == "Egreso":
                 return "background-color: #f8d7da; color: red;"
             return ""
-
+    
         st.markdown("---")
         st.subheader("📊 Movimientos registrados")
+    
         columnas_visibles = ["Fecha_Real", "Tipo", "Categoría", "Detalle", "Subdetalle", "Forma de pago", "Monto", "Comentario"]
-        styled_df = df[columnas_visibles].style.applymap(color_columna_tipo, subset=["Tipo"])
+        styled_df = df_filtrado[columnas_visibles].style.applymap(color_columna_tipo, subset=["Tipo"])
         st.dataframe(styled_df, use_container_width=True)
 
 elif seccion == "Actualizar Registros":
