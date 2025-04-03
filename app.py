@@ -169,7 +169,7 @@ ingresos = {
 # Egresos
 egresos = {
     "Vivienda": {"Cuota Banco": [], "Mantenimiento": [], "Luz": [], "Internet": [], "Calidda": [], "Amortización": []},
-    "Aseo (Limpieza)": {"Detergente": [], "Jabón": [], "Aromatizantes": [], "PrestoBarba": [], "Shampoo": []},
+    "Aseo (Limpieza)": {"Detergente": [], "Jabón": [], "Aromatizantes": [], "PrestoBarba": [], "Shampoo": [], "Objetos": []},
     "Alimentos": {"Carne": [], "Pollo": [], "Frutas": [], "Verduras": [], "Lácteos": [], "Especería": [], "Abarrotes": [], "Cereales": [], "Panadería": [], "Menú": [], "Restaurante": []},
     "Servicios": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": []},
     "Entretenimiento": {"Viajes": [], "Suscripciones": ["DisneyPlus", "Netflix", "Paramount"]},
