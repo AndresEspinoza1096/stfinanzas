@@ -371,10 +371,10 @@ elif seccion == "Visualización":
         st.subheader("📈 Indicadores Generales")
         colf1, colf2, colf3 = st.columns(3)
         with colf1:
-            tipos_seleccionados = st.multiselect("Filtrar por tipo", ["Ingreso", "Egreso", "Ahorros"], default=["Ingreso", "Egreso"])
+            tipos_seleccionados = st.multiselect("🔁 Filtrar por tipo", ["Ingreso", "Egreso", "Ahorros"], default=["Ingreso", "Egreso"])
         with colf2:
             fechas_unicas = sorted(df["Mes"].unique())
-            fechas_seleccionadas = st.multiselect("Filtrar por periodo (YYYY-MM)", fechas_unicas, default=fechas_unicas)
+            fechas_seleccionadas = st.multiselect("📅 Filtrar por periodo (YYYY-MM)", fechas_unicas, default=fechas_unicas)
         with colf3:
             categorias = ["Todas"] + sorted(df["Categoría"].dropna().unique())
             filtro_categoria = st.selectbox("Filtrar por categoría", categorias)
@@ -386,7 +386,7 @@ elif seccion == "Visualización":
         if filtro_categoria != "Todas":
             df_viz = df_viz[df_viz["Categoría"] == filtro_categoria]
             subcategorias = ["Todas"] + sorted(df_viz["Detalle"].dropna().unique())
-            filtro_subdetalle = st.selectbox("Filtrar por subcategoría", subcategorias)
+            filtro_subdetalle = st.selectbox("📂 Filtrar por categoría", subcategorias)
             if filtro_subdetalle != "Todas":
                 df_viz = df_viz[df_viz["Detalle"] == filtro_subdetalle]
 
