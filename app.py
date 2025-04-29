@@ -425,7 +425,7 @@ elif seccion == "Visualización":
 
         st.markdown("---")
         df_group = df_viz.groupby(["Mes_Label", "Tipo"])["Monto"].sum().reset_index()
-        fig = px.line(df_group, x="Mes", y="Monto", color="Tipo", markers=True, text="Monto",
+        fig = px.line(df_group, x="Mes_Label", y="Monto", color="Tipo", markers=True, text="Monto",
                       line_shape="spline",
                     title="📊 Evolutivo de Ingresos vs Egresos",
                      color_discrete_map = {
