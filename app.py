@@ -175,7 +175,7 @@ egresos = {
     "Entretenimiento": {"Viajes": [], "Suscripciones": ["DisneyPlus", "Netflix", "Paramount"]},
     "Otros": {"Regalos": [], "Emergencias": [], "Bebidas": [], "Snacks": []},
     "Ahorros": {"Ahorro General": []},
-    "Manuntención": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": [], "Regalos": [], "Juegos": []}
+    "Manuntención": {"Taxi": [], "Educación": ["Matrícula", "Libros", "Mensualidad", "Materiales", "Uniforme"], "Medicina": [], "Cita Médica": [], "Regalos": [], "Juegos": [], "Vestimenta": []}
 }
 
 meses_es = {
