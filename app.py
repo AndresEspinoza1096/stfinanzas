@@ -412,7 +412,7 @@ elif seccion == "Visualización":
         variacion = total_ingresos - total_egresos_sin_ahorro
         if total_ingresos == 0 or total_ingresos is None:
             total_ingresos = 0
-        porcentaje = (variacion / total_ingresos) * 100 if total_ingresos else -1
+        porcentaje = (variacion / total_ingresos) * 100 if total_ingresos else -100
             
         c1, c2 = st.columns(2)
         with c1:
