@@ -482,19 +482,24 @@ elif seccion == "Visualización":
                                   "Egreso": "#ff69b4"    # Rosado tenue
                                   })
 
-            # Añadir las etiquetas con el valor total
-            for index, row in df_viv_group.iterrows():
+            # Añadir anotaciones por cada barra (Ingreso y Egreso por separado)
+            for i, row in df_viv_group.iterrows():
                 fig_viv.add_annotation(
-                    x=row["Detalle"],
+                    x=row["Detalle"] + (" (I)" if row["Tipo"] == "Ingreso" else " (E)"),  # Separación lógica
                     y=row["Monto"],
                     text=f"${row['Monto']:,.2f}",
-                    xanchor='center',
-                    yanchor='top',
-                    yref='y',  # Asegurarse de que la referencia vertical sea el eje y
-                    yshift=5,  # Desplazar ligeramente hacia arriba (ajusta este valor si es necesario)
                     showarrow=False,
-                    font=dict(size=18, color='white')
+                    yshift=5,
+                    font=dict(size=14, color='white')
                 )
+            
+            # Ajustar layout para evitar solapamiento
+            fig_viv.update_layout(
+                uniformtext_minsize=8,
+                uniformtext_mode='hide',
+                xaxis_tickangle=0,
+                bargap=0.2
+            )
             st.plotly_chart(fig_viv, use_container_width=True)
             
         if filtro_categoria == "Servicios":
