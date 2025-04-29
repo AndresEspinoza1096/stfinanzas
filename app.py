@@ -393,7 +393,7 @@ elif seccion == "Visualización":
         if filtro_categoria != "Todas":
             df_viz = df_viz[df_viz["Categoría"] == filtro_categoria]
             subcategorias = ["Todas"] + sorted(df_viz["Detalle"].dropna().unique())
-            filtro_subdetalle = st.selectbox("📂 Filtrar por categoría", subcategorias)
+            filtro_subdetalle = st.selectbox("📂 Filtrar por subcategoría", subcategorias)
             if filtro_subdetalle != "Todas":
                 df_viz = df_viz[df_viz["Detalle"] == filtro_subdetalle]
 
@@ -425,13 +425,28 @@ elif seccion == "Visualización":
 
         st.markdown("---")
         df_group = df_viz.groupby(["Mes_Label", "Tipo"])["Monto"].sum().reset_index()
-        fig = px.line(df_group, x="Mes_Label", y="Monto", color="Tipo", markers=True,
+        fig = px.line(df_group, x="Mes", y="Monto", color="Tipo", markers=True, text="Monto",
+                      line_shape="spline",
                     title="📊 Evolutivo de Ingresos vs Egresos",
                      color_discrete_map = {
                       "Ingreso": "#0cb7f2",  # Morado
                       "Egreso": "#ff69b4"    # Rosado tenue
                       })
-        fig.update_layout(xaxis_title="Mes Año", yaxis_title="Monto (S/.)", legend_title="Tipo")
+        # Formato del texto
+        fig.update_traces(
+            texttemplate="%{text:.2f}",
+            textposition="top center"
+        )
+        fig.update_layout(
+            xaxis_title="Mes Año",
+            yaxis_title="Monto (S/.)",
+            legend_title="Tipo",
+            font=dict(color='white'),
+            plot_bgcolor='#1e1e1e',
+            paper_bgcolor='#1e1e1e',
+            hovermode="x unified"
+        )
+        # fig.update_layout(xaxis_title="Mes Año", yaxis_title="Monto (S/.)", legend_title="Tipo")
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
