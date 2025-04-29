@@ -452,16 +452,18 @@ elif seccion == "Visualización":
         st.markdown("---")
         st.subheader("📊 Distribución por Categoría")
         df_categoria = df_viz_ff.groupby(["Tipo", "Categoría"])["Monto"].sum().reset_index()
-        categorias1 = df_categoria["Categoría"].unique()
-        tipos1 = df_categoria["Tipo"].unique()
-
-        fig = go.Figure()
-
-        colors = {"Ingreso": "#0cb7f2", "Egreso": "#ff69b4"}
-
-        for tipo in tipos1:
+        # Colores personalizados
+        colors = {
+            "Ingreso": "#0cb7f2",
+            "Egreso": "#ff69b4"
+        }
+        
+        # Crear figura y agregar barras por tipo
+        fig_cat = go.Figure()
+        
+        for tipo in df_categoria["Tipo"].unique():
             data = df_categoria[df_categoria["Tipo"] == tipo]
-            fig.add_trace(go.Bar(
+            fig_cat.add_trace(go.Bar(
                 x=data["Categoría"],
                 y=data["Monto"],
                 name=tipo,
@@ -469,22 +471,20 @@ elif seccion == "Visualización":
                 text=[f"${v:,.2f}" for v in data["Monto"]],
                 textposition='outside'
             ))
-
-        # Layout
-        fig.update_layout(
+        
+        # Ajustes visuales
+        fig_cat.update_layout(
             title="Distribución de Montos por Categoría",
-            barmode='group',
             xaxis_title="Categoría",
             yaxis_title="Monto",
-            uniformtext_minsize=8,
-            uniformtext_mode='show',
+            barmode='group',
             font=dict(color='white'),
             plot_bgcolor='#1e1e1e',
             paper_bgcolor='#1e1e1e',
             legend=dict(font=dict(color='white'))
         )
-
-        st.plotly_chart(fig, use_container_width=True)
+        
+        st.plotly_chart(fig_cat, use_container_width=True)
         
         #fig_cat = px.bar(df_categoria, x="Categoría", y="Monto", color="Tipo", barmode="group",
         #                 title="Distribución de Montos por Categoría",
