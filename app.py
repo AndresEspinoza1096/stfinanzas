@@ -410,33 +410,15 @@ elif seccion == "Visualización":
         total_egresos_sin_ahorro = egresos_df["Monto"].sum()
         total_ingresos = ingresos_df["Monto"].sum()
         variacion = total_ingresos - total_egresos_sin_ahorro
-        # porcentaje = (variacion / total_ingresos) * 100 if total_ingresos else 0
-        delta_variacion = f"{variacion:,.2f}"
-        if variacion > 0:
-            delta_variacion = f"+{delta_variacion}"  # Añade un signo positivo para mayor claridad
-        elif variacion == 0:
-            delta_variacion = 0  # No mostrar delta si la variación es cero
-        
+        if total_ingresos == 0 or total_ingresos is None:
+            total_ingresos = 0
         porcentaje = (variacion / total_ingresos) * 100 if total_ingresos else 0
-        delta_porcentaje = f"{porcentaje:.1f}%"
-        if porcentaje > 0:
-            delta_porcentaje = f"+{delta_porcentaje}"
-        elif porcentaje == 0:
-            delta_porcentaje = 0
             
-        #c1, c2 = st.columns(2)
-        #with c1:
-            #st.metric("💚 Ingresos", f"S/ {total_ingresos:,.2f}")
-            #st.metric("❤️ Egresos", f"S/ {total_egresos_sin_ahorro:,.2f}")
-            #st.metric("🔄 Variación", f"S/ {variacion:,.2f}", delta=f"{porcentaje:.1f}%")
-        #with c2:
-            #st.metric("💰 Ahorros", f"S/ {ahorro_total:,.2f}")
-
         c1, c2 = st.columns(2)
         with c1:
             st.metric("💚 Ingresos", f"S/ {total_ingresos:,.2f}")
             st.metric("❤️ Egresos", f"S/ {total_egresos_sin_ahorro:,.2f}")
-            st.metric("🔄 Variación", f"S/ {delta_variacion}", delta=delta_porcentaje)
+            st.metric("🔄 Variación", f"S/ {variacion:,.2f}", delta=f"{porcentaje:.1f}%")
         with c2:
             st.metric("💰 Ahorros", f"S/ {ahorro_total:,.2f}")
 
