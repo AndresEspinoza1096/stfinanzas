@@ -435,8 +435,16 @@ elif seccion == "Visualización":
         # Formato del texto
         fig.update_traces(
             texttemplate="%{text:.2f}",
-            textposition="top center"
+            textposition="top center",
+            marker=dict(size=8)
         )
+
+        for trace in fig.data:
+            if trace.name == "Egreso":
+                trace.textposition = "bottom center"
+            elif trace.name == "Ingreso":
+                trace.textposition = "top center"
+        
         fig.update_layout(
             xaxis_title="Mes Año",
             yaxis_title="Monto (S/.)",
