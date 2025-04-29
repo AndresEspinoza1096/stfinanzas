@@ -472,8 +472,25 @@ elif seccion == "Visualización":
             st.subheader("📊 Comparativa Ingresos vs Egresos en Vivienda")
             df_viv = df_viz_ff[df_viz_ff["Categoría"] == "Vivienda"]
             df_viv_group = df_viv.groupby(["Detalle", "Tipo"])["Monto"].sum().reset_index()
+
+            # Definir la paleta de colores deseada
+            colores_viv = {"Ingreso": "green", "Egreso": "red"} # Puedes usar nombres de colores o códigos hex
             fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
-                             title="Comparativa por Subcategoría en Vivienda")
+                             title="Comparativa por Subcategoría en Vivienda",
+                             color_discrete_map=colores_viv)
+
+            # Añadir las etiquetas con el valor total
+            for trace in fig_viv.data:
+                for i, val in enumerate(trace.y):
+                    fig_viv.add_annotation(
+                        x=trace.x[i],
+                        y=val,
+                        text=f"${val:,.2f}", # Formatea el valor con separador de miles y 2 decimales
+                        xanchor='center',
+                        yanchor='bottom',
+                        showarrow=False,
+                        font=dict(size=10, color='black')
+                    )
             st.plotly_chart(fig_viv, use_container_width=True)
             
         if filtro_categoria == "Servicios":
