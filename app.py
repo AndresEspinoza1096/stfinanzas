@@ -6,6 +6,7 @@ import plotly.io as pio
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
+import plotly.graph_objects as go
 
 # Configuración inicial
 st.set_page_config(page_title="💰 Finanzas Personales", layout="wide")
@@ -475,32 +476,48 @@ elif seccion == "Visualización":
             df_viv = df_viz_ff[df_viz_ff["Categoría"] == "Vivienda"]
             df_viv_group = df_viv.groupby(["Detalle", "Tipo"])["Monto"].sum().reset_index()
 
-            fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
-                             title="Comparativa por Subcategoría en Vivienda",
-                             color_discrete_map = {
-                                  "Ingreso": "#0cb7f2",  # Morado
-                                  "Egreso": "#ff69b4"    # Rosado tenue
-                                  })
+            # Obtenemos lista única de subcategorías y tipos
+            detalles = df_viv_group["Detalle"].unique()
+            tipos = df_viv_group["Tipo"].unique()
 
-            # Añadir anotaciones por cada barra (Ingreso y Egreso por separado)
-            for i, row in df_viv_group.iterrows():
-                fig_viv.add_annotation(
-                    x=row["Detalle"] + (" (I)" if row["Tipo"] == "Ingreso" else " (E)"),  # Separación lógica
-                    y=row["Monto"],
-                    text=f"${row['Monto']:,.2f}",
-                    showarrow=False,
-                    yshift=5,
-                    font=dict(size=14, color='white')
-                )
+            #fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
+            #                 title="Comparativa por Subcategoría en Vivienda",
+            #                 color_discrete_map = {
+            #                      "Ingreso": "#0cb7f2",  # Morado
+            #                      "Egreso": "#ff69b4"    # Rosado tenue
+            #                      })
             
-            # Ajustar layout para evitar solapamiento
-            fig_viv.update_layout(
+            fig = go.Figure()
+
+            colors = {"Ingreso": "#0cb7f2", "Egreso": "#ff69b4"}
+            
+            for tipo in tipos:
+                data = df_viv_group[df_viv_group["Tipo"] == tipo]
+                fig.add_trace(go.Bar(
+                    x=data["Detalle"],
+                    y=data["Monto"],
+                    name=tipo,
+                    marker_color=colors[tipo],
+                    text=[f"${v:,.2f}" for v in data["Monto"]],
+                    textposition='outside'
+                ))
+
+            # Layout
+            fig.update_layout(
+                title="Comparativa por Subcategoría en Vivienda",
+                barmode='group',
+                xaxis_title="Detalle",
+                yaxis_title="Monto",
                 uniformtext_minsize=8,
-                uniformtext_mode='hide',
-                xaxis_tickangle=0,
-                bargap=0.2
+                uniformtext_mode='show',
+                font=dict(color='white'),
+                plot_bgcolor='#1e1e1e',
+                paper_bgcolor='#1e1e1e',
+                legend=dict(font=dict(color='white'))
             )
-            st.plotly_chart(fig_viv, use_container_width=True)
+
+            # st.plotly_chart(fig_viv, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)
             
         if filtro_categoria == "Servicios":
             st.markdown("---")
