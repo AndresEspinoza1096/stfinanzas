@@ -327,7 +327,11 @@ elif seccion == "Actualizar Registros":
         st.stop()
 
     if guardar:
-        fecha_real = fecha if (fecha.replace(day=1) + timedelta(days=32)).replace(day=1) - fecha >= timedelta(days=5) else (fecha.replace(day=1) + timedelta(days=32)).replace(day=1)
+        if tipo == "Ingreso":
+            fecha_real = fecha if (fecha.replace(day=1) + timedelta(days=32)).replace(day=1) - fecha >= timedelta(days=5) else (fecha.replace(day=1) + timedelta(days=32)).replace(day=1)
+        else: 
+            fecha_real = fecha
+            
         actualizado = {
             "Fecha": datetime.combine(fecha, datetime.min.time()),
             "Fecha_Actualizacion": datetime.now(),
