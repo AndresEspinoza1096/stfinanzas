@@ -489,7 +489,7 @@ elif seccion == "Visualización":
                     y=row["Monto"],
                     text=f"${row['Monto']:,.2f}",
                     xanchor='center',
-                    yanchor='bottom',
+                    yanchor='top',
                     showarrow=False,
                     font=dict(size=10, color='black')
                 )
