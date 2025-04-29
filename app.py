@@ -491,7 +491,7 @@ elif seccion == "Visualización":
                     xanchor='center',
                     yanchor='top',
                     showarrow=False,
-                    font=dict(size=10, color='black')
+                    font=dict(size=18, color='white')
                 )
             st.plotly_chart(fig_viv, use_container_width=True)
             
