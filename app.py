@@ -195,11 +195,13 @@ if seccion == "Formulario y Movimientos":
     tipo = st.radio("Selecciona el tipo de movimiento", ["Ingreso", "Egreso"])
     detalle = "-"
     subdetalle = "-"
+    fecha_registro = datetime.now()
     if tipo == "Ingreso":
         categoria = st.selectbox("Categoría de ingreso", list(ingresos.keys()))
-        fecha_registro = datetime.now()
+        fecha = st.date_input("Fecha", value=date.today())
         primero_mes_siguiente = (fecha.replace(day=1) + timedelta(days=32)).replace(day=1)
         fecha_real = fecha if (primero_mes_siguiente - fecha).days >= 7 else primero_mes_siguiente
+        
         if categoria in ["Vivienda", "Servicios"]:
             tipos_ingreso = list(ingresos[categoria].keys())
             tipo_ingreso = st.selectbox("Tipo", tipos_ingreso) if tipos_ingreso else "-"
@@ -217,12 +219,11 @@ if seccion == "Formulario y Movimientos":
         detalle_lista = egresos[categoria][tipo_egreso] if tipo_egreso else []
         subdetalle = st.selectbox("Detalle", detalle_lista) if detalle_lista else "-"
         detalle = tipo_egreso
-        fecha_registro = datetime.now()
-        fecha_real = fecha_registro
+        fecha = st.date_input("Fecha", value=date.today())
+        fecha_real = fecha
 
     forma_pago = st.selectbox("Forma de pago", formas_pago)
     monto = st.number_input("Monto (S/.)", min_value=0.0, format="%.2f")
-    fecha = st.date_input("Fecha", value=date.today())
     comentario = st.text_input("Comentario")
     
     if st.button("Registrar movimiento"):
