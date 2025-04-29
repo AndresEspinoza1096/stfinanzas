@@ -490,11 +490,12 @@ elif seccion == "Visualización":
                     text=f"${row['Monto']:,.2f}",
                     xanchor='center',
                     yanchor='top',
+                    yref='y',  # Asegurarse de que la referencia vertical sea el eje y
+                    yshift=5,  # Desplazar ligeramente hacia arriba (ajusta este valor si es necesario)
+                    showarrow=False,
                     showarrow=False,
                     font=dict(size=18, color='white')
                 )
-            # Rotar las etiquetas del eje X para dar más espacio horizontal
-            fig_viv.update_layout(xaxis_tickangle=-45)
             st.plotly_chart(fig_viv, use_container_width=True)
             
         if filtro_categoria == "Servicios":
