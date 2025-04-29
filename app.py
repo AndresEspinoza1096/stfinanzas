@@ -493,7 +493,6 @@ elif seccion == "Visualización":
                     yref='y',  # Asegurarse de que la referencia vertical sea el eje y
                     yshift=5,  # Desplazar ligeramente hacia arriba (ajusta este valor si es necesario)
                     showarrow=False,
-                    showarrow=False,
                     font=dict(size=18, color='white')
                 )
             st.plotly_chart(fig_viv, use_container_width=True)
