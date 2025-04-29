@@ -512,12 +512,41 @@ elif seccion == "Visualización":
         df_cat = df_viz_ff.pivot_table(index="Categoría", columns="Tipo", values="Monto", aggfunc="sum", fill_value=0).reset_index()
         df_cat["Variación"] = df_cat.get("Ingreso", 0) - df_cat.get("Egreso", 0)
         df_cat["Color"] = df_cat["Variación"].apply(lambda x: "Positiva" if x >= 0 else "Negativa")
-        fig_var_cat = px.bar(df_cat, x="Categoría", y="Variación", color="Color", barmode="group",
-                             title="Variación total por categoría", color_discrete_map={
-                                 "Positiva": "lightgreen",
-                                 "Negativa": "red"
-                             })
+
+        fig_var_cat = px.bar(
+            df_cat,
+            x="Categoría",
+            y="Variación",
+            color="Color",
+            barmode="group",
+            title="Variación total por categoría",
+            color_discrete_map={
+                "Positiva": "#90ee90",   # lightgreen
+                "Negativa": "#FF9999"    # rojo claro/daltónico friendly
+            },
+            text="Variación"
+        )
+        
+        # Formato del texto
+        fig_var_cat.update_traces(texttemplate="%{text:.2f}", textposition="outside")
+        
+        # Layout visual
+        fig_var_cat.update_layout(
+            xaxis_title="Categoría",
+            yaxis_title="Variación (Ingreso - Egreso)",
+            font=dict(color='white'),
+            plot_bgcolor='#1e1e1e',
+            paper_bgcolor='#1e1e1e',
+            legend=dict(font=dict(color='white'))
+        )
+        
         st.plotly_chart(fig_var_cat, use_container_width=True)
+        #fig_var_cat = px.bar(df_cat, x="Categoría", y="Variación", color="Color", barmode="group",
+        #                     title="Variación total por categoría", color_discrete_map={
+        #                         "Positiva": "lightgreen",
+        #                         "Negativa": "red"
+        #                     })
+        #st.plotly_chart(fig_var_cat, use_container_width=True)
 
         if filtro_categoria == "Vivienda":
             st.markdown("---")
