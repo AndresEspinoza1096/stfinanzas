@@ -415,7 +415,7 @@ elif seccion == "Visualización":
         if variacion > 0:
             delta_variacion = f"+{delta_variacion}"  # Añade un signo positivo para mayor claridad
         elif variacion == 0:
-            delta_variacion = None  # No mostrar delta si la variación es cero
+            delta_variacion = 0  # No mostrar delta si la variación es cero
         
         porcentaje = (variacion / total_ingresos) * 100 if total_ingresos else 0
         delta_porcentaje = f"{porcentaje:.1f}%"
