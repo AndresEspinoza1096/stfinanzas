@@ -481,17 +481,16 @@ elif seccion == "Visualización":
                                   })
 
             # Añadir las etiquetas con el valor total
-            for trace in fig_viv.data:
-                for i, val in enumerate(trace.y):
-                    fig_viv.add_annotation(
-                        x=trace.x[i],
-                        y=val,
-                        text=f"${val:,.2f}", # Formatea el valor con separador de miles y 2 decimales
-                        xanchor='center',
-                        yanchor='bottom',
-                        showarrow=False,
-                        font=dict(size=10, color='black')
-                    )
+            for index, row in df_viv_group.iterrows():
+                fig_viv.add_annotation(
+                    x=row["Detalle"],
+                    y=row["Monto"],
+                    text=f"${row['Monto']:,.2f}",
+                    xanchor='center',
+                    yanchor='bottom',
+                    showarrow=False,
+                    font=dict(size=10, color='black')
+                )
             st.plotly_chart(fig_viv, use_container_width=True)
             
         if filtro_categoria == "Servicios":
