@@ -422,7 +422,7 @@ elif seccion == "Visualización":
         if porcentaje > 0:
             delta_porcentaje = f"+{delta_porcentaje}"
         elif porcentaje == 0:
-            delta_porcentaje = None
+            delta_porcentaje = 0
             
         #c1, c2 = st.columns(2)
         #with c1:
