@@ -493,6 +493,8 @@ elif seccion == "Visualización":
                     showarrow=False,
                     font=dict(size=18, color='white')
                 )
+            # Rotar las etiquetas del eje X para dar más espacio horizontal
+            fig_viv.update_layout(xaxis_tickangle=-45)
             st.plotly_chart(fig_viv, use_container_width=True)
             
         if filtro_categoria == "Servicios":
