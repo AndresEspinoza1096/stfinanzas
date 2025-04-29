@@ -473,11 +473,12 @@ elif seccion == "Visualización":
             df_viv = df_viz_ff[df_viz_ff["Categoría"] == "Vivienda"]
             df_viv_group = df_viv.groupby(["Detalle", "Tipo"])["Monto"].sum().reset_index()
 
-            # Definir la paleta de colores deseada
-            colores_viv = {"Ingreso": "green", "Egreso": "red"} # Puedes usar nombres de colores o códigos hex
             fig_viv = px.bar(df_viv_group, x="Detalle", y="Monto", color="Tipo", barmode="group",
                              title="Comparativa por Subcategoría en Vivienda",
-                             color_discrete_map=colores_viv)
+                             color_discrete_map = {
+                                  "Ingreso": "#0cb7f2",  # Morado
+                                  "Egreso": "#ff69b4"    # Rosado tenue
+                                  })
 
             # Añadir las etiquetas con el valor total
             for trace in fig_viv.data:
