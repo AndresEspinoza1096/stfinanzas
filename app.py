@@ -122,70 +122,68 @@ def verificar_credenciales(usuario, password):
 def login():
     st.markdown("""
         <style>
-            .login-container {
-                display: flex;
-                background-color: #1e1e2f;
-                border-radius: 10px;
-                overflow: hidden;
-                box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            }
-            .login-image {
-                flex: 1;
-                background-image: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308');  /* Cambia la imagen si quieres */
-                background-size: cover;
-                background-position: center;
-                min-height: 500px;
-            }
-            .login-form {
-                flex: 1;
-                padding: 40px;
-                background-color: #2e2f40;
-                color: white;
-            }
-            .login-form h2 {
-                margin-bottom: 30px;
-                color: white;
-            }
-            .stTextInput>div>div>input {
-                background-color: #3a3b4c;
-                color: white;
-                border: none;
-                border-radius: 6px;
-            }
-            .stTextInput>div>label {
-                color: #ccc;
-            }
-            .stButton>button {
-                width: 100%;
-                background-color: #00acee;
-                color: white;
-                border: none;
-                padding: 10px;
-                border-radius: 6px;
-                margin-top: 20px;
-                font-weight: bold;
-                font-size: 16px;
-            }
+        .login-card {
+            width: 350px;
+            margin: 80px auto;
+            padding: 40px 30px;
+            border-radius: 15px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .login-card img {
+            width: 60px;
+            margin-bottom: 20px;
+        }
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: #50c8ec;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .login-card small {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+        }
         </style>
-        <div class="login-container">
-            <div class="login-image"></div>
-            <div class="login-form">
-                <h2>🔐 Sign In</h2>
-                """, unsafe_allow_html=True)
+
+        <div class="login-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
+            <h3>Sign In</h3>
+    """, unsafe_allow_html=True)
 
     usuario = st.text_input("Your email")
     clave = st.text_input("Your password", type="password")
 
-    if st.button("SIGN IN"):
+    if st.button("LOGIN"):
         if verificar_credenciales(usuario, clave):
             st.session_state["autenticado"] = True
             st.rerun()
         else:
-            st.error("Credenciales inválidas")
+            st.error("Invalid credentials")
 
-    st.markdown("""</div></div>""", unsafe_allow_html=True)
+    st.markdown("""
+        <small><a href="#">Forgot password?</a></small>
+        <small>By logging in you agree to our <a href="#">privacy policy</a> & <a href="#">terms of service</a>.</small>
+        </div>
+    """, unsafe_allow_html=True)
 
-# Control de sesión
+# --- Sesión ---
 if "autenticado" not in st.session_state:
     st.session_state["autenticado"] = False
 
