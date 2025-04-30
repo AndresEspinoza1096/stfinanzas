@@ -123,10 +123,6 @@ def login():
             color: #555;
         }
         </style>
-
-        <div class="login-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB1-SVRuR17lEOJPfc135_gw0RceBLQJ0qUJUL7E-E4Ao9u-IyxLJG2X3ug25J0XkiLl0&usqp=CAU">
-            <h3>🔐 Sign In</h3>
     """, unsafe_allow_html=True)
 
     usuario = st.text_input("👤 Usuario")
@@ -138,8 +134,6 @@ def login():
             st.rerun()
         else:
             st.error("Invalid credentials")
-
-    st.markdown("""</div>""", unsafe_allow_html=True)
 
 # --- Sesión ---
 if "autenticado" not in st.session_state:
