@@ -93,30 +93,32 @@ def verificar_credenciales(usuario, password):
         st.session_state["usuario_actual"] = usuario
         return True
     return False
-"""
-def login():
-    st.title("🔐 Inicio de Sesión")
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        usuario = st.text_input("👤 Usuario")
-    with col2:
-        clave = st.text_input("🔒 Contraseña", type="password")
 
-    if st.button("Ingresar"):
-        if verificar_credenciales(usuario, clave):
-            st.session_state["autenticado"] = True
-            st.rerun()
-        else:
-            st.error("Credenciales inválidas")
+# def login():                             # Define la función de inicio de sesión
+#     st.title("🔐 Inicio de Sesión")      # Título principal del formulario
 
+#     col1, col2 = st.columns([1, 1])      # Divide la pantalla en dos columnas iguales
 
-if "autenticado" not in st.session_state:
-    st.session_state["autenticado"] = False
+#     with col1:                           # En la primera columna (izquierda)
+#         usuario = st.text_input("👤 Usuario")  # Campo para ingresar el usuario
 
-if not st.session_state["autenticado"]:
-    login()
-    st.stop()
-"""
+#     with col2:                           # En la segunda columna (derecha)
+#         clave = st.text_input("🔒 Contraseña", type="password")  # Campo de contraseña oculto
+
+#     if st.button("Ingresar"):            # Si se presiona el botón "Ingresar"
+#         if verificar_credenciales(usuario, clave):  # Verifica si las credenciales son válidas
+#             st.session_state["autenticado"] = True  # Guarda estado de autenticación en la sesión
+#             st.rerun()                   # Recarga la app para aplicar el estado de sesión
+#         else:                            # Si las credenciales no son válidas
+#             st.error("Credenciales inválidas")  # Muestra mensaje de error
+
+# if "autenticado" not in st.session_state:  # Si no existe el estado 'autenticado'
+#     st.session_state["autenticado"] = False  # Lo inicializa como False
+
+# if not st.session_state["autenticado"]:  # Si el usuario no ha iniciado sesión
+#     login()                            # Ejecuta la función de login
+#     st.stop()                          # Detiene la ejecución de la app hasta iniciar sesión
+
 def login():
     st.markdown("""
         <style>
