@@ -125,8 +125,8 @@ def login():
             <h3>🔐 Sign In</h3>
     """, unsafe_allow_html=True)
 
-    usuario = st.text_input("Usuario")
-    clave = st.text_input("Password", type="password")
+    usuario = st.text_input("👤 Usuario")
+    clave = st.text_input("🔒  Password", type="password")
 
     if st.button("LOGIN"):
         if verificar_credenciales(usuario, clave):
