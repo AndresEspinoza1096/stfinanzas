@@ -93,7 +93,7 @@ def verificar_credenciales(usuario, password):
         st.session_state["usuario_actual"] = usuario
         return True
     return False
-
+"""
 def login():
     st.title("🔐 Inicio de Sesión")
     col1, col2 = st.columns([1, 1])
@@ -116,6 +116,82 @@ if "autenticado" not in st.session_state:
 if not st.session_state["autenticado"]:
     login()
     st.stop()
+"""
+def login():
+    st.markdown("""
+        <style>
+            .login-container {
+                display: flex;
+                background-color: #1e1e2f;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            }
+            .login-image {
+                flex: 1;
+                background-image: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308');  /* Cambia la imagen si quieres */
+                background-size: cover;
+                background-position: center;
+                min-height: 500px;
+            }
+            .login-form {
+                flex: 1;
+                padding: 40px;
+                background-color: #2e2f40;
+                color: white;
+            }
+            .login-form h2 {
+                margin-bottom: 30px;
+                color: white;
+            }
+            .stTextInput>div>div>input {
+                background-color: #3a3b4c;
+                color: white;
+                border: none;
+                border-radius: 6px;
+            }
+            .stTextInput>div>label {
+                color: #ccc;
+            }
+            .stButton>button {
+                width: 100%;
+                background-color: #00acee;
+                color: white;
+                border: none;
+                padding: 10px;
+                border-radius: 6px;
+                margin-top: 20px;
+                font-weight: bold;
+                font-size: 16px;
+            }
+        </style>
+        <div class="login-container">
+            <div class="login-image"></div>
+            <div class="login-form">
+                <h2>🔐 Sign In</h2>
+                """, unsafe_allow_html=True)
+
+    usuario = st.text_input("Your email")
+    clave = st.text_input("Your password", type="password")
+
+    if st.button("SIGN IN"):
+        if verificar_credenciales(usuario, clave):
+            st.session_state["autenticado"] = True
+            st.rerun()
+        else:
+            st.error("Credenciales inválidas")
+
+    st.markdown("""</div></div>""", unsafe_allow_html=True)
+
+# Control de sesión
+if "autenticado" not in st.session_state:
+    st.session_state["autenticado"] = False
+
+if not st.session_state["autenticado"]:
+    login()
+    st.stop()
+
+
 
 # Formas de pago
 formas_pago = ["INTERBANK", "BCP", "YAPE", "PLIN", "EFECTIVO", "BBVA"]
