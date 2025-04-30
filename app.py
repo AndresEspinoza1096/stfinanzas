@@ -140,6 +140,25 @@ if "autenticado" not in st.session_state:
     st.session_state["autenticado"] = False
 
 if not st.session_state["autenticado"]:
+    st.markdown("""
+        <style>
+        .login-card input {
+            background-color: #ffffff;
+            color: #000000;
+            caret-color: #000000;  /* ✅ Cursor negro visible */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        .login-card input::placeholder {
+            color: #999;
+        }
+        .login-card input:focus {
+            outline: none;
+            border: 1px solid #009de0;
+            box-shadow: 0 0 5px #009de0;
+        }
+        </style>
+    """, unsafe_allow_html=True)
     login()
     st.stop()
 else:
