@@ -73,7 +73,7 @@ def login():
             background-color: transparent;
         }
         .stApp {
-            background-image: url('https://img.freepik.com/foto-gratis/fondo-cuadricula-digital-futurista-azul-oscuro-degradado_53876-129728.jpg?semt=ais_hybrid&w=740');
+            background-image: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_23-2150441890.jpg?semt=ais_hybrid&w=740');
             background-size: cover;
             background-position: center;
         }
@@ -125,8 +125,8 @@ def login():
             <h3>🔐 Sign In</h3>
     """, unsafe_allow_html=True)
 
-    usuario = st.text_input("Your email")
-    clave = st.text_input("Your password", type="password")
+    usuario = st.text_input("Usuario")
+    clave = st.text_input("Password", type="password")
 
     if st.button("LOGIN"):
         if verificar_credenciales(usuario, clave):
