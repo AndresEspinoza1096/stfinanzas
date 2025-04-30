@@ -122,49 +122,60 @@ def verificar_credenciales(usuario, password):
 def login():
     st.markdown("""
         <style>
+        body {
+            background-color: transparent;
+        }
+        .stApp {
+            background-image: url('https://img.freepik.com/foto-gratis/fondo-cuadricula-digital-futurista-azul-oscuro-degradado_53876-129728.jpg?semt=ais_hybrid&w=740');
+            background-size: cover;
+            background-position: center;
+        }
         .login-card {
             width: 350px;
-            margin: 80px auto;
+            margin: 100px auto;
             padding: 40px 30px;
             border-radius: 15px;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         .login-card img {
-            width: 60px;
+            width: 70px;
             margin-bottom: 20px;
         }
-        .login-card input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
+        .login-card h3 {
+            margin-bottom: 30px;
+            color: #333;
         }
-        .login-card button {
+        .stTextInput>div>div>input {
+            background-color: #f0f0f0;
+            color: #000;
+            border-radius: 6px;
+        }
+        .stTextInput>div>label {
+            color: #333;
+        }
+        .stButton>button {
             width: 100%;
-            padding: 12px;
-            background: #50c8ec;
-            border: none;
+            background-color: #009de0;
             color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
             font-weight: bold;
             font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
+            margin-top: 15px;
         }
-        .login-card small {
-            display: block;
-            margin-top: 10px;
+        .login-footer {
+            margin-top: 15px;
             font-size: 12px;
-            color: #888;
+            color: #555;
         }
         </style>
 
         <div class="login-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
-            <h3>Sign In</h3>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB1-SVRuR17lEOJPfc135_gw0RceBLQJ0qUJUL7E-E4Ao9u-IyxLJG2X3ug25J0XkiLl0&usqp=CAU">
+            <h3>🔐 Sign In</h3>
     """, unsafe_allow_html=True)
 
     usuario = st.text_input("Your email")
@@ -176,12 +187,6 @@ def login():
             st.rerun()
         else:
             st.error("Invalid credentials")
-
-    st.markdown("""
-        <small><a href="#">Forgot password?</a></small>
-        <small>By logging in you agree to our <a href="#">privacy policy</a> & <a href="#">terms of service</a>.</small>
-        </div>
-    """, unsafe_allow_html=True)
 
 # --- Sesión ---
 if "autenticado" not in st.session_state:
