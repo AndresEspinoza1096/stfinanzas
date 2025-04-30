@@ -69,22 +69,24 @@ def verificar_credenciales(usuario, password):
 def login():
     st.markdown("""
         <style>
-        body {
-            background-color: transparent;
-        }
-        .stApp {
+        html, body, .stApp {
+            height: 100vh;
             background-image: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_23-2150441890.jpg?semt=ais_hybrid&w=740');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
         .login-card {
             width: 350px;
-            margin: 100px auto;
             padding: 40px 30px;
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.95);
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         .login-card img {
             width: 70px;
@@ -101,6 +103,8 @@ def login():
         }
         .stTextInput>div>label {
             color: #333;
+            font-size: 13px;
+            text-align: left;
         }
         .stButton>button {
             width: 100%;
@@ -121,7 +125,7 @@ def login():
         </style>
 
         <div class="login-card">
-            <img src=""https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB1-SVRuR17lEOJPfc135_gw0RceBLQJ0qUJUL7E-E4Ao9u-IyxLJG2X3ug25J0XkiLl0&usqp=CAU"">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB1-SVRuR17lEOJPfc135_gw0RceBLQJ0qUJUL7E-E4Ao9u-IyxLJG2X3ug25J0XkiLl0&usqp=CAU">
             <h3>🔐 Sign In</h3>
     """, unsafe_allow_html=True)
 
@@ -134,6 +138,8 @@ def login():
             st.rerun()
         else:
             st.error("Invalid credentials")
+
+    st.markdown("""</div>""", unsafe_allow_html=True)
 
 # --- Sesión ---
 if "autenticado" not in st.session_state:
