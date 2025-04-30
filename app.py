@@ -142,18 +142,20 @@ if "autenticado" not in st.session_state:
 if not st.session_state["autenticado"]:
     st.markdown("""
         <style>
-        .login-card input {
-            background-color: #ffffff;
-            color: #000000;
-            caret-color: #000000;  /* ✅ Cursor negro visible */
-            border: 1px solid #ccc;
+        /* Corrige el color del cursor en los inputs de Streamlit */
+        .stTextInput input, .stPasswordInput input {
+            caret-color: black !important;  /* ✅ Fuerza el cursor negro */
+            color: black !important;        /* Texto negro para contraste */
+            background-color: white !important;
+        }
+    
+        /* Opcional: bordes más suaves para mejorar apariencia */
+        .stTextInput input, .stPasswordInput input {
             border-radius: 6px;
+            border: 1px solid #ccc;
         }
-        .login-card input::placeholder {
-            color: #999;
-        }
-        .login-card input:focus {
-            outline: none;
+    
+        .stTextInput input:focus, .stPasswordInput input:focus {
             border: 1px solid #009de0;
             box-shadow: 0 0 5px #009de0;
         }
